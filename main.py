@@ -38,24 +38,29 @@ player_spells = [fire, thunder, blizzard, metero, cure, cura]
 # Select enemy spells
 enemy_spells = [fire, metero, cure]
 
-# initiate player, enemy with hp,mp,atk,df,magic,items
-player1 = Person("Valo1", 1000, 500, 100, 50, player_spells, player_items)
-player2 = Person("Valo2", 1000, 500, 100, 50, player_spells, player_items)
-player3 = Person("Valo3", 1000, 500, 100, 50, player_spells, player_items)
+# initiate player with hp, mp, atk, df, magic, items
+player1 = Person("Player1", 1000, 500, 100, 50, player_spells, player_items)
+player2 = Person("Player2", 1000, 500, 100, 50, player_spells, player_items)
+player3 = Person("Player3", 1000, 500, 100, 50, player_spells, player_items)
 
+players = [player1, player2, player3]
+
+# initiate enemies with hp, mp, atk, df, magic, items
 enemy3 = Person("MicroMonster", 500, 250, 250, 25, enemy_spells, [])
 enemy2 = Person("MiniMonster ", 1000, 500, 500, 50, enemy_spells, [])
 enemy1 = Person("Monster     ", 2000, 1000, 200, 100, enemy_spells, [])
 
-players = [player1, player2, player3]
-enemies = [enemy1,enemy2,enemy3]
+enemies = [enemy1, enemy2, enemy3]
 
 running = True
 i = 0
 
 while running:
 
-    # Get team stats
+    # Print welcome message
+    print("\n" + Bcolors.TITLE4 + " Simple Python RPG Battle " + Bcolors.ENDC)
+
+    # Get All stats
     print("\n" + Bcolors.BOLD + "NAME         HP                                    MP            " + Bcolors.ENDC)
     for player in players:
         player.get_stats()
@@ -63,31 +68,29 @@ while running:
     for enemy in enemies:
         enemy.get_enemy_stats()
 
+    # Start playing
     for player in players:
-        print("\n" + Bcolors.HEADER + "You turn ", player.name + Bcolors.ENDC)
+        print("\n" + Bcolors.HEADER + "---------------------------" + "Your turn,", player.name + "---------------------------" + Bcolors.ENDC, "\n")
+        player.get_stats()
 
-        # player select attack or magic or item
+        # Player: select attack or magic or item
         player.choose_action()
-        print("Type 4 to get Your stats")
         choice = input("Choose Action:")
         index = int(choice) - 1
 
-        if index == 3:
-            player.get_stats()
-
-        # if player select attack then attack and print result
+        # if player select attack > attack and print result
         if index == 0:
             enemy = player.choose_target(enemies)
             dmg = player.generate_damage()
             enemies[enemy].take_damage(dmg)
-            print("You attacked", enemies[enemy].name.replace(" ",""), "for", dmg , "points of damage.")
+            print("\n You attacked", enemies[enemy].name.replace(" ", ""), "for", dmg, "points of damage.")
             enemies[enemy].get_enemy_stats()
 
             if enemies[enemy].get_hp() == 0:
-                print(enemies[enemy].name,"has died.")
+                print(enemies[enemy].name, "has died.")
                 del enemies[enemy]
 
-        # if player select magic then select spell then attack and print result
+        # if player select magic > select spell
         elif index == 1:
             player.choose_magic()
             print("Type 0 to go back\n")
@@ -107,14 +110,16 @@ while running:
                 print(Bcolors.FAIL + "\nYou don't have enough magic points\n" + Bcolors.ENDC)
                 continue
 
+            # if player selected white magic > heal
             if spell.type == "white":
                 player.heal(magic_dmg)
-                print("You healed ! HP + ", magic_dmg, "points. with ", spell.name, " And cost ", spell.cost)
+                print("\n You healed ! HP + ", magic_dmg, "points with ", spell.name, " And cost ", spell.cost)
 
+            # if player selected black magic > attack
             elif spell.type == "black":
                 enemy = player.choose_target(enemies)
                 enemies[enemy].take_damage(magic_dmg)
-                print("You attacked", enemies[enemy].name.replace(" ",""), "for", magic_dmg, "points of damage. with ", spell.name, " And cost ", spell.cost)
+                print("\n You attacked", enemies[enemy].name.replace(" ", ""), "for", magic_dmg, "points of damage with ", spell.name, " And cost ", spell.cost, " :")
                 enemies[enemy].get_enemy_stats()
 
                 if enemies[enemy].get_hp() == 0:
@@ -123,6 +128,7 @@ while running:
 
             player.reduce_mp(spell.cost)
 
+        # if player select items > select item
         elif index == 2:
             player.choose_item()
             print("Type 0 to go back\n")
@@ -133,16 +139,19 @@ while running:
 
             item = player.items[item_choice]["item"]
 
+            # Check if player have enough quantity of this item
             if player.items[item_choice]["quantity"] == 0:
                 print(Bcolors.FAIL + "\n" + "None left..." + Bcolors.ENDC)
                 continue
 
             player.items[item_choice]["quantity"] -= 1
 
+            # if player select item with type potion > heal
             if item.type == "potion":
                 player.heal(item.prop)
                 print(Bcolors.OKGREEN + "\n" + item.name + " heals for", str(item.prop), "HP" + Bcolors.ENDC)
 
+            # if player select item with type elixer > heal
             elif item.type == "elixer":
 
                 if item.name == "MegaElixer":
@@ -155,10 +164,11 @@ while running:
                 print("\n", item.name, ":", str(item.prop))
                 print(Bcolors.OKGREEN + "\n" + item.name + " fully restores HP/MP" + Bcolors.ENDC)
 
+            # if player select item with type attack > attack
             elif item.type == "attack":
                 enemy = player.choose_target(enemies)
                 enemies[enemy].take_damage(item.prop)
-                print("You attacked", enemies[enemy].name.replace(" ",""),"for", item.prop, "points of damage with ", item.name)
+                print("You attacked", enemies[enemy].name.replace(" ", ""), "for", item.prop, "points of damage with ", item.name)
                 print(Bcolors.FAIL + "\n" + item.name + " deals", str(item.prop),
                       "points of damage " + Bcolors.ENDC)
                 enemies[enemy].get_enemy_stats()
@@ -167,7 +177,7 @@ while running:
                     print(enemies[enemy].name, "has died.")
                     del enemies[enemy]
 
-    # Check enemies & players for  defeated / Battle is over
+    # Check enemies & players for defeated / Battle is over
     defeated_enemies = 0
     defeated_players = 0
 
@@ -207,26 +217,30 @@ while running:
 
     # Enemy attack phase
     for enemy in enemies:
-        enemy_choice = random.randrange(0,2)
+        enemy_choice = random.randrange(0, 2)
         target = random.randrange(0, len(players))
 
+        # if enemy choice is 0 {attack} then attack
         if enemy_choice == 0:
             enemy_dmg = enemy.generate_damage()
             players[target].take_damage(enemy_dmg)
             print("\n" + Bcolors.FAIL +
-                  enemy.name.replace(" ",""), "attacks", players[target].name , "for", enemy_dmg, "points of damage :"
+                  enemy.name.replace(" ", ""), "attacks", players[target].name, "for", enemy_dmg, "points of damage :"
                   + Bcolors.ENDC)
             players[target].get_stats()
 
+        # if enemy choice is 0 {magic} then select spell
         elif enemy_choice == 1:
             spell, magic_dmg = enemy.choose_enemy_spell()
             enemy.reduce_mp(spell.cost)
 
+            # if enemy spell is white magic > heal
             if spell.type == "white":
                 enemy.heal(magic_dmg)
                 print("\n", enemy.name.replace(" ", ""), "Enemy healed ! HP +", magic_dmg, "points. with ", spell.name, " And cost ", spell.cost)
                 enemy.get_stats()
 
+            # if enemy spell is black magic > attack
             elif spell.type == "black":
                 players[target].take_damage(magic_dmg)
                 print("\n", Bcolors.FAIL +

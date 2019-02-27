@@ -1,6 +1,7 @@
 import random
 
 
+# Text styles
 class Bcolors:
     HEADER = '\033[33;1;4m'
     OKBLUE = '\033[94m'
@@ -14,18 +15,14 @@ class Bcolors:
     ENDC = '\033[0m'
     BOLD = "\033[1m"
     UNDERLINE = "\033[4m"
-
-
-'''
-atk attack points
-'''
+    TITLE4 = '\033[1;30;42m'
 
 
 # create player class
 class Person:
     # define the player parameters
     def __init__(self, name, hp, mp, atk, df, magic, items):
-        self.name = name    #player name
+        self.name = name    # player name
         self.hp = hp    # hit points
         self.maxhp = hp
         self.mp = mp    # magic points
@@ -84,7 +81,7 @@ class Person:
         i = 1
         print("\n " + Bcolors.TITLE2 + " MAGIC " + Bcolors.ENDC)
         for spell in self.magic:
-            print("    " + str(i) + ":", spell.name , "(cost:",  spell.cost , ")" )
+            print("    " + str(i) + ":", spell.name, "(cost:",  spell.cost, ")")
             i += 1
 
     # Choose item to use
@@ -124,10 +121,9 @@ class Person:
             current_hp = hp_string
 
         # print status
-        print(Bcolors.FAIL + str(self.name) + "        "
-              + Bcolors.FAIL + current_hp + " |" + hp_bar + "| "
-              + Bcolors.ENDC)
+        print(Bcolors.FAIL + str(self.name) + "        " + Bcolors.FAIL + current_hp + " |" + hp_bar + "| " + Bcolors.ENDC)
 
+    # get player stats
     def get_stats(self):
 
         # HP Bar
@@ -183,7 +179,7 @@ class Person:
             current_mp = mp_string
 
         # print status
-        print(Bcolors.OKYELLOW  + str(self.name) + "        "
+        print(Bcolors.OKYELLOW + str(self.name) + "        "
               + Bcolors.OKGREEN + current_hp + " |" + hp_bar + "| "
               + Bcolors.OKBLUE + current_mp + " |" + mp_bar + "| "
               + Bcolors.ENDC)
@@ -204,13 +200,14 @@ class Person:
         return self.magic[i]["cost"]
 
     # Choose enemy to attack
-    def choose_target(self,enemies):
+    def choose_target(self, enemies):
         i = 1
         print("\n " + Bcolors.TITLE + " Enemies " + Bcolors.ENDC)
         for enemy in enemies:
             if enemy.get_hp() != 0:
                 print("    " + str(i) + ":", enemy.name)
                 i += 1
+
         choice = int(input("Choose Enemy:")) - 1
         return choice
 
@@ -221,7 +218,7 @@ class Person:
         magic_dmg = spell.generate_damage()
 
         pct = self.hp / self.maxhp * 100
-        if self.mp < spell.cost or spell.type == "white" and pct > 50 :
+        if self.mp < spell.cost or spell.type == "white" and pct > 50:
             self.choose_enemy_spell()
         else:
             return spell, magic_dmg
