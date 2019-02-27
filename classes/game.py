@@ -214,6 +214,7 @@ class Person:
         choice = int(input("Choose Enemy:")) - 1
         return choice
 
+    # Enemy choose spell to use
     def choose_enemy_spell(self):
         magic_choice = random.randrange(0, len(self.magic))
         spell = self.magic[magic_choice]
