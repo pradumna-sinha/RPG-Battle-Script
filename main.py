@@ -32,8 +32,10 @@ player_items = [{"item": potion, "quantity": 5},
                 {"item":  megaelixer, "quantity": 4},
                 {"item": grenade, "quantity": 6}]
 
-# Select player
+# Select player spells
 player_spells = [fire, thunder, blizzard, metero, cure, cura]
+
+# Select enemy spells
 enemy_spells = [fire, metero, cure]
 
 # initiate player, enemy with hp,mp,atk,df,magic,items
