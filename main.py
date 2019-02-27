@@ -75,8 +75,13 @@ while running:
 
         # Player: select attack or magic or item
         player.choose_action()
+        print("Enter 0 to exit")
         choice = input("Choose Action:")
         index = int(choice) - 1
+
+        # if player select attack > attack and print result
+        if index == -1:
+            exit()
 
         # if player select attack > attack and print result
         if index == 0:
