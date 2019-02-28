@@ -3,6 +3,8 @@ from classes.game import Person, Bcolors
 from classes.magic import Spell
 from classes.inventory import Item
 import random
+from time import sleep
+
 
 # Create black magic abilities > name, cost, dmg, type
 fire = Spell("Fire", 60, 500, "black")
@@ -223,16 +225,31 @@ while running:
     # Enemy attack phase
     for enemy in enemies:
         enemy_choice = random.randrange(0, 2)
-        target = random.randrange(0, len(players))
+
+        if len(players) == 1:
+            target = 1
+        elif len(players) > 1:
+            target = random.randrange(0, (len(players) - 1))
+        else:
+            print(Bcolors.TITLE2 + "You enemies have defeated you!" + Bcolors.ENDC)
+            running = False
+
+        if enemy.get_mp() < 25:
+            enemy_choice = 0
 
         # if enemy choice is 0 {attack} then attack
         if enemy_choice == 0:
             enemy_dmg = enemy.generate_damage()
+
             players[target].take_damage(enemy_dmg)
             print("\n" + Bcolors.FAIL +
                   enemy.name.replace(" ", ""), "attacks", players[target].name, "for", enemy_dmg, "points of damage :"
                   + Bcolors.ENDC)
             players[target].get_stats()
+
+            if players[target].get_hp() == 0:
+                print(players[target].name, "has died.")
+                del players[target]
 
         # if enemy choice is 0 {magic} then select spell
         elif enemy_choice == 1:

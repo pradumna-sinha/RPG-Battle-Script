@@ -13,6 +13,6 @@ python3 main.py
 ```
 
 ##### References
-> Initial project from Joseph Delgadillo @JosephDelgadillo - [Python course
-](https://jtdigital.teachable.com)
-
+> Initial project from [Python course](https://jtdigital.teachable.com/) created by:<br/> 
+Joseph Delgadillo [@JosephDelgadillo](https://github.com/JosephDelgadillo/) 
+& Nick Germaine [@nickgermaine](https://github.com/nickgermaine/)
