@@ -2,7 +2,7 @@
 This is a simple RPG Battle using Python 3  :video_game:
 
 
-> ![screenshots](img.png)
+> ![screenshots](screenshot2.png)
 
 
 ### Running the script
